@@ -1,5 +1,6 @@
 package com.example.boatengfranklaud.instagramclone;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +48,7 @@ public class SignUpLoginActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if (e == null) {
                             FancyToast.makeText(SignUpLoginActivity.this, parseUser.get("username") + " is signed up successfully.", Toast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
+                        goToWelcome();
                         } else {
                             FancyToast.makeText(SignUpLoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT, FancyToast.ERROR, true).show();
 
@@ -66,6 +68,7 @@ public class SignUpLoginActivity extends AppCompatActivity {
                             public void done(ParseUser user, ParseException e) {
                                 if(user != null && e == null){
                                     FancyToast.makeText(SignUpLoginActivity.this, user.get("username") + " is logged in successfully.", Toast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
+                                    goToWelcome();
                                 }else {
                                     FancyToast.makeText(SignUpLoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                 }
@@ -73,5 +76,11 @@ public class SignUpLoginActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    private void goToWelcome(){
+
+        Intent welcomeIntent = new Intent(SignUpLoginActivity.this, WelcomeActivity.class);
+        startActivity(welcomeIntent);
     }
 }
