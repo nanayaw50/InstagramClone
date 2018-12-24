@@ -22,7 +22,6 @@ public class SignUp extends AppCompatActivity {
 
     private EditText name, kspeed, kpower, pspeed, ppower;
     private TextView txtGetData;
-    private Button btnGetAllData;
     private String allKickBoxers;
 
     @Override
@@ -38,7 +37,7 @@ public class SignUp extends AppCompatActivity {
 
         txtGetData = findViewById(R.id.txtGetData);
 
-        btnGetAllData = findViewById(R.id.btnGetAllData);
+        Button btnGetAllData = findViewById(R.id.btnGetAllData);
 
         txtGetData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,16 +63,22 @@ public class SignUp extends AppCompatActivity {
 
                 allKickBoxers = "";
 
-                ParseQuery<ParseObject> allquery = ParseQuery.getQuery("KickBoxer");
 
-                allquery.findInBackground(new FindCallback<ParseObject>() {
+                ParseQuery<ParseObject> allQuery = ParseQuery.getQuery("KickBoxer");
+
+                // set a constraints on the query
+                //allQuery.whereGreaterThan("punchPower", 100);
+                allQuery.whereGreaterThanOrEqualTo("punchPower", 100);
+                allQuery.setLimit(1);
+
+                allQuery.findInBackground(new FindCallback<ParseObject>() {
                     @Override
                     public void done(List<ParseObject> objects, ParseException e) {
                         if (objects.size() > 0 && e == null) {
 
                             for(ParseObject names : objects){
 
-                                allKickBoxers += "name: " + names.getString("name") + " kick speed: "+ names.getInt("kickSpeed") + " punch power: " + names.getInt("punchPower") + "\n";
+                                allKickBoxers +=  names.getString("name") + " kick speed: "+ names.getInt("kickSpeed") + " punch power: " + names.getInt("punchPower") + "\n";
                             }
 
                             txtGetData.setText(allKickBoxers);
