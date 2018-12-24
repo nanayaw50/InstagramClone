@@ -1,5 +1,6 @@
 package com.example.boatengfranklaud.instagramclone;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,7 @@ public class SignUp extends AppCompatActivity {
     private EditText name, kspeed, kpower, pspeed, ppower;
     private TextView txtGetData;
     private String allKickBoxers;
+    private Button btnNextActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class SignUp extends AppCompatActivity {
         txtGetData = findViewById(R.id.txtGetData);
 
         Button btnGetAllData = findViewById(R.id.btnGetAllData);
+        btnNextActivity = findViewById(R.id.btnNextActivity);
 
         txtGetData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +91,14 @@ public class SignUp extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        });
+
+        btnNextActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent loginIntent = new Intent(SignUp.this, SignUpLoginActivity.class);
+                startActivity(loginIntent);
             }
         });
 
