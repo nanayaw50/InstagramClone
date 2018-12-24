@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
         if(ParseUser.getCurrentUser() != null){
-            ParseUser.getCurrentUser().logOut();
+            gotoSocialMedia();
         }
     }
 
@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             if(user != null && e == null){
                                 progressDialog.dismiss(); // dismiss progress dialog
                                 clearWidgets();
+                                gotoSocialMedia();
                                 FancyToast.makeText(LoginActivity.this, user.getUsername() + " logged in successfully.",
                                         FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
                             }else {
@@ -111,5 +112,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // method to handle main activity(Social Media)
+    private void gotoSocialMedia(){
+        startActivity(new Intent(this, SocialMediaActivity.class));
+        finish();
     }
 }

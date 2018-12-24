@@ -54,8 +54,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         // check if user has already sign in
         if (ParseUser.getCurrentUser() != null){
-            ParseUser.getCurrentUser().logOutInBackground();
-            //ParseUser.logOut();
+            gotoSocialMedia();
         }
 
     }
@@ -97,13 +96,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 public void done(ParseException e) {
                     if (e == null) {
                         clearWidgets();
-                        progressDialog.dismiss(); // dismiss progress dialog
+                        gotoSocialMedia();
                         FancyToast.makeText(SignUp.this, appUser.getUsername() + " is signed successfully.",
                                 FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
                     } else {
                         FancyToast.makeText(SignUp.this, e.getLocalizedMessage(),
                                 FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
                     }
+                    progressDialog.dismiss(); // dismiss progress dialog
                 }
             });
         }
@@ -125,5 +125,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // method to handle main activity(Social Media)
+    private void gotoSocialMedia(){
+        startActivity(new Intent(this, SocialMediaActivity.class));
+        finish();
     }
 }
