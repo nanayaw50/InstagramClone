@@ -70,23 +70,24 @@ public class SharePictureTab extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.imgShare:
-                // we set permission in the manifest xml to read external storage
+                // already set permission in the manifest xml to read external storage
                 // but its a dangerous permission and we need to explicitly ask the
                 // user to grant the app permission for reading external storage (SD-card, Rom etc)
-                if ((Build.VERSION.SDK_INT >= 23) && (ActivityCompat.checkSelfPermission(getContext(), permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                if ((Build.VERSION.SDK_INT >= 23) && (ActivityCompat.checkSelfPermission(getContext(),
+                        permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
                     requestPermissions(new String[]{permission.READ_EXTERNAL_STORAGE}, 1000);
-                }else {
-                    getSelectImg();
+                } else {
+                    getSelectImg(); // call and execute user-defined method to select image from the user device
                 }
                 break;
 
             case R.id.btn_share_picture:
-                if(receivedBitmapImage != null){
-                    if (txtImgDescription.getText().toString().equals("")){
+                if (receivedBitmapImage != null) {
+                    if (txtImgDescription.getText().toString().equals("")) {
                         FancyToast.makeText(getContext(), "Image description is required!", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
-                    }else {
+                    } else {
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        receivedBitmapImage.compress(Bitmap.CompressFormat.PNG, 100,byteArrayOutputStream);
+                        receivedBitmapImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                         byte[] bytes = byteArrayOutputStream.toByteArray();
 
                         // Parse objects
@@ -105,19 +106,18 @@ public class SharePictureTab extends Fragment implements View.OnClickListener {
                         parseObject.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                if(e == null){
+                                if (e == null) {
                                     FancyToast.makeText(getContext(), "Done!", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
 
-                                }else {
+                                } else {
                                     FancyToast.makeText(getContext(), "Unknown error!", FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
                                 }
-
                                 progressDialog.dismiss();
                             }
                         });
                     }
-                }else {
-
+                } else {
+                    FancyToast.makeText(getContext(), "Please select image first.", FancyToast.LENGTH_LONG, FancyToast.INFO, true).show();
                 }
                 break;
         }
@@ -135,13 +135,13 @@ public class SharePictureTab extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 2000) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
 
                 // do something with your captured image
                 try {
                     Uri selectedImg = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                    Cursor cursor = getActivity().getContentResolver().query(selectedImg, filePathColumn,null, null, null);
+                    Cursor cursor = getActivity().getContentResolver().query(selectedImg, filePathColumn, null, null, null);
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -150,7 +150,7 @@ public class SharePictureTab extends Fragment implements View.OnClickListener {
 
                     receivedBitmapImage = BitmapFactory.decodeFile(picturePath);
                     imgShare.setImageBitmap(receivedBitmapImage);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -162,8 +162,8 @@ public class SharePictureTab extends Fragment implements View.OnClickListener {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(requestCode == 1000){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 1000) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getSelectImg();
             }
         }
