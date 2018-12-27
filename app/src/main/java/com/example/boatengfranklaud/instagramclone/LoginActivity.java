@@ -85,7 +85,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void done(ParseUser user, ParseException e) {
                             if(user != null && e == null){
-                                progressDialog.dismiss(); // dismiss progress dialog
                                 clearWidgets();
                                 gotoSocialMedia();
                                 FancyToast.makeText(LoginActivity.this, user.getUsername() + " logged in successfully.",
@@ -94,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 FancyToast.makeText(LoginActivity.this, e.getLocalizedMessage(),
                                         FancyToast.LENGTH_LONG, FancyToast.ERROR, true).show();
                             }
+                            progressDialog.dismiss(); // dismiss progress dialog
                         }
                     });
         }
